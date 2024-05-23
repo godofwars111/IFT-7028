@@ -47,7 +47,7 @@ def simulate_ecocentre(n_robots):
     return att_ts, n_in_queue, depart_ts, arrival_times
 
 # Fonction pour calculer les indicateurs de performance
-def calculate_performance(att_ts, n_in_queue, depart_ts, warmup_period):
+def calculate_performance(att_ts, n_in_queue, depart_ts, warmup_period,n_robots):
     att_ts = np.array(att_ts)
     n_in_queue = np.array(n_in_queue)
     depart_ts = np.array(depart_ts)
@@ -59,7 +59,7 @@ def calculate_performance(att_ts, n_in_queue, depart_ts, warmup_period):
     avg_wait_time = np.mean(att_ts)
     n_moy_cam_queue = np.mean(n_in_queue)
     n_cam_min = len(att_ts) / (total_sim_time - warmup_period)
-    utilisation = np.mean(att_ts) / mean_intervale_ts
+    utilisation = n_cam_min * service_times[n_robots]
 
     return avg_wait_time, n_moy_cam_queue, n_cam_min, utilisation
 

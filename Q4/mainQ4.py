@@ -2,14 +2,14 @@ import simpy
 import numpy as np
 from scipy import stats
 from simulatorQ4 import simulate_ecocentre
-
+from simulatorQ4 import plot_indicateurs
 
 
 base_mean_intervale_ts = 10.7
 service_time_10_robots = 1.9
 total_sim_time = 40000
-max_warmup_period = 10000
-n_replications = 30
+max_warmup_period = 6000
+n_replications = 50
 
 
 
@@ -41,7 +41,7 @@ def confidence_interval(data, confidence=0.95):
 
 def main():
 
-    intervale_moy_ts = [10.7, 9.0, 7.5, 6.0, 5.0, 4.0]
+    intervale_moy_ts = [3.0,2.0,1.9,1.8,1.5]
     results = {intervale_ts: [] for intervale_ts in intervale_moy_ts}
 
     for intervale_ts in intervale_moy_ts:
@@ -50,6 +50,8 @@ def main():
             performance = calculate_performance(att_ts, n_in_queue, depart_ts,max_warmup_period)
             results[intervale_ts].append(performance)
 
+        plot_indicateurs(att_ts, n_in_queue, depart_ts, arrival_times,
+                    f'{intervale_ts}  min')
     indicateurs = ['avg_wait_time', 'n_moy_cam_queue', 'n_cam_min', 'utilisation']
     f_results = {indicateur: {} for indicateur in indicateurs}
 
@@ -76,6 +78,7 @@ def main():
         n_moy_cam_queue, _, _ = f_results['n_moy_cam_queue'][intervale_ts]
         n_cam_min, _, _ = f_results['n_cam_min'][intervale_ts]
         utilisation, _, _ = f_results['utilisation'][intervale_ts]
+
         print(f"Pour un temps moyen entre arrivées de {intervale_ts} minutes:")
         print(f"  - Temps d'attente moyen: {avg_wait_time:.2f} minutes")
         print(f"  - Nombre moyen de camions dans la queue: {n_moy_cam_queue:.2f}")

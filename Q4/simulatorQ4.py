@@ -1,5 +1,6 @@
 import simpy
 import numpy as np
+import matplotlib.pyplot as plt
 
 base_mean_intervale_ts = 10.7
 service_time_10_robots = 1.9
@@ -38,3 +39,50 @@ def simulate_ecocentre(intervale_ts):
     env.run(until=total_sim_time)
     return att_ts, n_in_queue, depart_ts, arrival_times
 
+
+def cumulative_average(data):
+    return np.cumsum(data) / np.arange(1, len(data) + 1)
+def plot_indicateurs(att_ts, n_in_queue, depart_ts, arrival_times, title):
+
+    avg_wait_time = cumulative_average(att_ts)
+
+
+    n_moy_cam_queue = cumulative_average(n_in_queue)
+
+
+    n_cam_min = np.arange(1, len(depart_ts) + 1) / depart_ts
+
+
+    busy_times = np.array(
+        [min(1.9, depart_ts[i] - arrival_times[i]) for i in range(len(depart_ts))])
+    cumulative_busy_time = np.cumsum(busy_times)
+    utilisation = cumulative_busy_time / depart_ts
+
+    fig, axs = plt.subplots(4, 1, figsize=(12, 24))
+
+    axs[0].plot(depart_ts, avg_wait_time)
+    axs[0].set_title(f'Temps d’attente({title})', loc='left')
+    axs[0].set_xlabel('Temps (minutes)')
+    axs[0].set_ylabel('Temps Temps d’attente moyen (minutes)')
+    axs[0].legend()
+
+    axs[1].plot(depart_ts, n_moy_cam_queue)
+    axs[1].set_title(f'Longueur de file ({title})', loc='left')
+    axs[1].set_xlabel('Temps (minutes)')
+    axs[1].set_ylabel('Nombre moyen camion dans la fil')
+    axs[1].legend()
+
+    axs[2].plot(depart_ts, n_cam_min)
+    axs[2].set_title(f'Camion par minute ({title})', loc='left')
+    axs[2].set_xlabel('Temps (minutes)')
+    axs[2].set_ylabel('n_cam_min (Camion par minute)')
+    axs[2].legend()
+
+    axs[3].plot(depart_ts, utilisation)
+    axs[3].set_title(f'Temps d’utilisation ({title})', loc='left')
+    axs[3].set_xlabel('Temps (minutes)')
+    axs[3].set_ylabel('Utilisation')
+    axs[3].legend()
+
+    plt.tight_layout()
+    plt.show()

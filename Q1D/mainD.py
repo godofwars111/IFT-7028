@@ -14,11 +14,11 @@ service_times = {
 }
 
 warmup_times = {
-    2: 10000,
-    3: 7500,
-    5: 7500,
-    7: 7500,
-    10: 4000
+    2: 6000,
+    3: 6000,
+    5: 5000,
+    7: 4000,
+    10: 3000
 }
 
 
@@ -31,16 +31,8 @@ def main():
     n_robots_list = [2, 3, 5, 7, 10]
     warmup_periods = {}
 
-    for n_robots in n_robots_list:
-        att_ts, n_in_queue, depart_ts, arrival_times = simulate_ecocentre(n_robots)
 
-        visual_warmup_period = warmup_times[n_robots]
-        warmup_periods[n_robots] = visual_warmup_period
-
-        plot_indicateurs(att_ts, n_in_queue, depart_ts, arrival_times, visual_warmup_period,
-                        f'{n_robots} Robots',n_robots)
-
-    max_warmup_period = max(warmup_periods.values())
+    max_warmup_period = max(warmup_times.values())
 
     f_results = {}
     for n_robots in n_robots_list:

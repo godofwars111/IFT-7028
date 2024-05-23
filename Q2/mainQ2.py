@@ -16,14 +16,15 @@ service_times = {
 }
 total_sim_time = 40000  # Durée totale de la simulation en minutes
 initial_warmup_period = 2000  # Période d'échauffement initiale
-n_replications = 10  # Nombre de réplications
+n_replications = 50  # Nombre de réplications
+
 
 warmup_times = {
-    2: 10000,
-    3: 7500,
-    5: 7500,
-    7: 7500,
-    10: 4000
+    2: 6000,
+    3: 6000,
+    5: 5000,
+    7: 4000,
+    10: 3000
 }
 
 
@@ -54,7 +55,7 @@ def main():
     for n_robots in n_robots_list:
         for _ in range(n_replications):
             att_ts, n_in_queue, depart_ts, arrival_times = simulate_ecocentre(n_robots)
-            performance = calculate_performance(att_ts, n_in_queue, depart_ts, max_warmup_period)
+            performance = calculate_performance(att_ts, n_in_queue, depart_ts, max_warmup_period,n_robots)
             results[n_robots].append(performance)
 
 
